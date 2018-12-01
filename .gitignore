@@ -1,0 +1,5 @@
+# Ingore file named ''
+
+#Ignore folder named
+node_modules/
+dist/

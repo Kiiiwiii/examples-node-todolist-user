@@ -1,0 +1,21 @@
+{
+  "name": "udemy-web-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "build-ts": "tsc",
+    "start": "npm run serve",
+    "serve": "node dist/server.js",
+    "watch-node": "nodemon dist/server.js",
+    "watch-ts": "tsc -w"
+  },
+  "author": "yifei",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.16.0",
+    "@types/mongodb": "^3.1.15",
+    "express": "^4.16.4",
+    "mongodb": "^3.1.10"
+  }
+}
