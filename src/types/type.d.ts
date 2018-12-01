@@ -4,6 +4,7 @@ declare namespace TodoModule {
   interface TodoItem {
     text: string
     isCompleted: boolean
+    completedAt: number
   }
 }
 
