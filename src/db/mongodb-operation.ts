@@ -23,49 +23,32 @@ class Operation<T> implements DatabaseModule.Operation<T> {
     return db.collection<T>(this.collectionName).find(options).toArray();
   }
 
-  public deleteItems = (db: Db, options: Partial<T>, deleteOne = false) => {
+  public deleteItems = (db: Db, options: Partial<T> | string, deleteOne = false) => {
     const deleteOptions = typeof options === 'string' ? new ObjectID(options) : options;
     if (deleteOne) {
       return db.collection(this.collectionName).findOneAndDelete(deleteOptions);
     }
     return db.collection(this.collectionName).deleteMany(deleteOptions);
   }
-}
 
-class Todo {
-  private COLLECTIONNAME = 'Todos';
-  operation: DatabaseModule.Operation<TodoModule.TodoItem>;
-  constructor(){
-    this.operation = new Operation(this.COLLECTIONNAME);
-  }
-  public addItem(db: Db, item: TodoModule.TodoItem) {
-    return this.operation.addItem(db, item);
-  }
-  public getItems(db: Db, options?: Partial<TodoModule.TodoItem> | string) {
-    return this.operation.getItems(db, options);
-  }
-
-  public deleteItems(db: Db, options: Partial<TodoModule.TodoItem>, deleteOne = false) {
-    return this.operation.deleteItems(db, options, deleteOne);
+  public updateItem = (db: Db, filter: Partial<T> | string, update: Partial<T>) => {
+    const properFilters = typeof filter === 'string' ? new ObjectID(filter) : filter;
+    return db.collection<Partial<T> | ObjectID>(this.collectionName).findOneAndUpdate(properFilters, {
+      $set: update
+    }, {
+      returnOriginal: false
+    })
   }
 }
 
-
-class User {
-  private COLLECTIONNAME = 'Users';
-  operation: DatabaseModule.Operation<UserModule.User>;
+class Todo extends Operation<TodoModule.TodoItem>{
   constructor() {
-    this.operation = new Operation(this.COLLECTIONNAME);
+    super('Todos');
   }
-  public addItem(db: Db, item: UserModule.User) {
-    return this.operation.addItem(db, item);
-  }
-  public getItems(db: Db, options?: Partial<UserModule.User> | string) {
-    return this.operation.getItems(db, options);
-  }
-
-  public deleteItems(db: Db, options: Partial<UserModule.User>, deleteOne = false) {
-    return this.operation.deleteItems(db, options, deleteOne);
+}
+class User extends Operation<UserModule.User>{
+  constructor() {
+    super('Users');
   }
 }
 

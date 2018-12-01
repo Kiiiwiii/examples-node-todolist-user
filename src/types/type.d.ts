@@ -20,5 +20,6 @@ declare namespace DatabaseModule {
     addItem: (db: Db, item: T) => Promise<InsertOneWriteOpResult>;
     getItems: (db: Db, options: Partial<T> | string) => Promise<any[]>;
     deleteItems: (db: Db, options: Partial<T> | string, deleteOne: boolean) => Promise<any>;
+    updateItem: (db: Db, filter: Partial<T> | string, update: Partial<T>) => Promise<any>;
   }
 }
