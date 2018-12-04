@@ -1,7 +1,7 @@
 import express from 'express';
 import log from './log';
-import dogRouter from './router-middleware/dogs';
-import catRouter from './router-middleware/cats';
+import apiRouter from './router-middleware/api';
+import './db/mongodb-connect';
 
 const app = express();
 
@@ -12,8 +12,7 @@ app.use(log('app-log.txt'));
 app.use('/static', express.static(__dirname + '/client/public'));
 
 // router middleware - api data
-app.use('/dog', dogRouter);
-app.use('/cat', catRouter);
+app.use('/api', apiRouter);
 
 // root - single page application - entry point
 app.get('*', (_req, res) => {
