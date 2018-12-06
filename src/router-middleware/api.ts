@@ -1,7 +1,7 @@
 import express from 'express';
-import Todo from '../db/schema/todo.schema';
-import mongooseOperation from './db.mongoose-operation.router';
+import todoRouter from './todo.router';
 
 const router = express.Router();
-router.use('/todos', mongooseOperation(Todo));
+router.use('/todos', todoRouter);
+
 export default router;

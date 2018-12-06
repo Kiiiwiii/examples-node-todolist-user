@@ -1,5 +1,7 @@
 import express from 'express';
 import log from './log';
+import bodyParser from 'body-parser';
+import expressValidator from 'express-validator';
 import apiRouter from './router-middleware/api';
 import './db/mongodb-connect';
 
@@ -12,6 +14,8 @@ app.use(log('app-log.txt'));
 app.use('/static', express.static(__dirname + '/client/public'));
 
 // router middleware - api data
+app.use(bodyParser.json());
+app.use(expressValidator());
 app.use('/api', apiRouter);
 
 // root - single page application - entry point
