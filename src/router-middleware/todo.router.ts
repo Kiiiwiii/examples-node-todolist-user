@@ -58,8 +58,18 @@ router.get('/lists', validation['lists'], validationHandler, (req: any, res: any
 router.get('/item/:id', validation['item'], validationHandler, (req: any, res: any) => {
   const queryData = matchedData(req, {locations: ['params']});
   dbOperation.findItem(queryData.id).then(result => {
+    // returns null when no data is matched
+    if(!result){
+      return Promise.reject('id is not valid');
+    }
     res.status(200).send(result);
-  }).catch(err => console.log(err));
+  }).catch(err => {
+    res.send({
+      data: null,
+      errorMsg: 'id is not valid'
+    })
+    console.log(err);
+  });
 });
 
 export default router;

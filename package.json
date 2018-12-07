@@ -10,6 +10,9 @@
     "watch-node": "nodemon dist/server.js",
     "watch-ts": "tsc -w"
   },
+  "engines": {
+    "node": "10.13.0"
+  },
   "author": "yifei",
   "license": "ISC",
   "dependencies": {
