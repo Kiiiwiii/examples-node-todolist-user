@@ -7,7 +7,7 @@ import './db/mongodb-connect';
 const app = express();
 const port = process.env.PORT || 3000;
 // app level middleware
-app.use(log('app-log.txt'));
+app.use(log('../log/app-log.txt'));
 
 // static file
 app.use('/static', express.static(__dirname + '/client/public'));
