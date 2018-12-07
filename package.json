@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build-ts": "tsc",
+    "postinstall": "npm run build-ts",
     "start": " npm run serve",
     "serve": "node dist/server.js",
     "watch-node": "nodemon dist/server.js",
@@ -17,13 +18,16 @@
   "author": "yifei",
   "license": "ISC",
   "dependencies": {
-    "@types/express": "^4.16.0",
-    "@types/express-validator": "^3.0.0",
-    "@types/mongodb": "^3.1.15",
-    "@types/mongoose": "^5.3.2",
     "express": "^4.16.4",
     "express-validator": "^5.3.0",
     "mongodb": "^3.1.10",
     "mongoose": "^5.3.14"
+  },
+  "devDependencies": {
+    "typescript": "^3.2.2",
+    "@types/express": "^4.16.0",
+    "@types/express-validator": "^3.0.0",
+    "@types/mongodb": "^3.1.15",
+    "@types/mongoose": "^5.3.2"
   }
 }

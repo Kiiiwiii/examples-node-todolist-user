@@ -2,7 +2,7 @@ import express from 'express';
 import log from './log';
 import bodyParser from 'body-parser';
 import apiRouter from './router-middleware/api';
-import './db/mongodb-connect';
+// import './db/mongodb-connect';
 
 const app = express();
 const port = process.env.PORT || 3000;
