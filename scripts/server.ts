@@ -4,8 +4,6 @@ import bodyParser from 'body-parser';
 import apiRouter from './router-middleware/api';
 import './db/mongodb-connect';
 
-console.log(process.env);
-
 const app = express();
 const port = process.env.PORT || 3000;
 // app level middleware
