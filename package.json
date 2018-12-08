@@ -8,6 +8,7 @@
     "postinstall": "npm run build-ts",
     "server:heroku": "npm start",
 
+    "start": " npm run serve",
     "serve": "node dist/server.js",
     "watch-node": "nodemon dist/server.js",
     "build-ts": "tsc",
