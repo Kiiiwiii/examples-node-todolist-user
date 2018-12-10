@@ -18,6 +18,14 @@ class MongooseOperation<T extends Document> implements DatabaseModule.MongooseOp
   findItem(id: string) {
     return this.model.findById(id);
   }
+
+  deleteItem(id: string) {
+    return this.model.findByIdAndRemove(id);
+  }
+
+  updateItem(_id: string, update: Partial<T>) {
+    return this.model.findOneAndUpdate({_id}, update, {new: true});
+  }
 }
 
 export default MongooseOperation;

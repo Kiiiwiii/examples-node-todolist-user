@@ -1,5 +1,5 @@
 import { Db, InsertOneWriteOpResult, ObjectID } from "mongodb";
-import {Document, DocumentQuery} from 'mongoose';
+import {Document, DocumentQuery, Query} from 'mongoose';
 declare namespace TodoModule {
   interface TodoItem {
     text: string
@@ -40,5 +40,7 @@ declare namespace DatabaseModule {
     addItem: (item: T) => Promise<T>;
     lists: (options?: Partial<T>) => DocumentQuery<T[], T, {}>;
     findItem: (id: string) => DocumentQuery<T, T, {}>;
+    deleteItem: (id: string) => DocumentQuery<T, T, {}>;
+    updateItem: (id: string, update: Partial<T>) => DocumentQuery<T, T, {}>;
   }
 }

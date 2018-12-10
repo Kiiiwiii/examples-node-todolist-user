@@ -14,15 +14,14 @@ const validation = {
     body('text', 'Text is required').exists(),
     body('isCompleted', 'isCompleted should be a boolean value')
       .optional()
-      .custom((value) => value === 'true' || value === 'false'),
+      .custom((value) => value === true || value === false),
     body('completedAt', 'completedAt should be a timestamp number').optional().isInt()
   ],
   lists: [
     query('text').optional(),
     query('isCompleted', 'isCompleted should be a boolean value')
       .optional()
-      .custom((value) => value === 'true' || value === 'false'),
-    sanitizeQuery('isCompleted').toBoolean(),
+      .custom((value) => value === true || value === false),
     sanitizeQuery('text').customSanitizer(value => {
       return new RegExp(value, "i");
     })
@@ -30,6 +29,12 @@ const validation = {
   ],
   item: [
     param('id', 'id is required').exists()
+  ],
+  updateItem: [
+    param('id', 'id is required').exists(),
+    body('text').optional(),
+    body('isCompleted', 'isCompleted should be a boolean value')
+      .optional().custom((value) => value === true || value === false)
   ]
 }
 
@@ -71,5 +76,46 @@ router.get('/item/:id', validation['item'], validationHandler, (req: any, res: a
     console.log(err);
   });
 });
+
+router.delete('/:id', validation['item'], validationHandler, (req: any, res: any) => {
+  const queryData = matchedData(req, { locations: ['params'] });
+  dbOperation.deleteItem(queryData.id).then(result => {
+    // returns null when no data is matched
+    if (!result) {
+      return Promise.reject('id is not valid');
+    }
+    res.status(200).send(result);
+  }).catch(err => {
+    res.send({
+      data: null,
+      errorMsg: 'id is not valid'
+    })
+    console.log(err);
+  });
+})
+
+router.patch('/:id', validation['updateItem'], validationHandler, (req: any, res: any) => {
+  const id = matchedData(req, {locations: ['params']}).id;
+  const update = matchedData(req, {locations: ['body']});
+
+  // complete logic
+  if(update.isCompleted === true) {
+    update.completedAt = new Date().getTime();
+  } else if(update.isCompleted === false) {
+    update.completedAt = null;
+  }
+  dbOperation.updateItem(id, update).then(result => {
+    if (!result) {
+      return Promise.reject('id is not valid');
+    }
+    res.status(200).send(result);
+  }).catch(err => {
+    res.send({
+      data: null,
+      errorMsg: 'id is not valid'
+    })
+    console.log(err);
+  });
+})
 
 export default router;
