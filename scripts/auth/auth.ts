@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const secret = process.env.JWTSECRET || 'my secret for development in local environment.';
+const secret = process.env.AUTHSECRET || 'my secret for development in local environment.';
 export default {
   generateToken(payload: any) {
     return jwt.sign(payload, secret);
