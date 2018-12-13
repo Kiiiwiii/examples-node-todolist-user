@@ -22,9 +22,11 @@ declare namespace UserModule {
   }
   interface UserModel extends Document {
     email: string,
-    name: string,
-    age: number,
-    location: string
+    password: string,
+    token: {
+      access: string,
+      token: string
+    }[]
   }
 }
 

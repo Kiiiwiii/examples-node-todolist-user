@@ -4,10 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-
     "postinstall": "npm run build-ts",
     "server:heroku": "npm start",
-
     "start": " npm run serve",
     "serve": "node dist/server.js",
     "watch-node": "nodemon dist/server.js",
@@ -23,14 +21,18 @@
   "dependencies": {
     "express": "^4.16.4",
     "express-validator": "^5.3.0",
+    "jsonwebtoken": "^8.4.0",
     "mongodb": "^3.1.10",
-    "mongoose": "^5.3.14"
+    "mongoose": "^5.3.14",
+    "validator": "^10.9.0"
   },
   "devDependencies": {
-    "typescript": "^3.2.2",
     "@types/express": "^4.16.0",
     "@types/express-validator": "^3.0.0",
+    "@types/jsonwebtoken": "^8.3.0",
     "@types/mongodb": "^3.1.15",
-    "@types/mongoose": "^5.3.2"
+    "@types/mongoose": "^5.3.2",
+    "@types/validator": "^9.4.4",
+    "typescript": "^3.2.2"
   }
 }
