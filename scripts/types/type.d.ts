@@ -39,10 +39,14 @@ declare namespace DatabaseModule {
   }
 
   interface MongooseOperation<T extends Document> {
-    addItem: (item: T) => Promise<T>;
+    addItem: (item: T) => Promise<any>;
     lists: (options?: Partial<T>) => DocumentQuery<T[], T, {}>;
     findItem: (id: string) => DocumentQuery<T, T, {}>;
     deleteItem: (id: string) => DocumentQuery<T, T, {}>;
     updateItem: (id: string, update: Partial<T>) => DocumentQuery<T, T, {}>;
+  }
+
+  interface UserOperation<T extends Document> extends MongooseOperation<T>{
+    login: (email: string, password: string) => any;
   }
 }
