@@ -47,7 +47,7 @@ userSchema.methods.generateToken = function() {
       token,
       email: this.email
     }
-  }).catch(console.log);
+  });
 
 }
 const User = mongoose.model<UserModule.UserModel>('Users', userSchema, 'Users');
@@ -60,7 +60,7 @@ class UserOperation extends MongooseOperation<UserModule.UserModel> implements D
   // overwrite inherited method
   addItem(item: UserModule.UserModel) {
     const newItem = new this.model(item);
-    return newItem.save().then(() => (newItem as any).generateToken()).catch(console.log);
+    return newItem.save().then(() => (newItem as any).generateToken());
   }
   login(email: string, password: string) {
 
