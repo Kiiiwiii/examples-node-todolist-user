@@ -26,9 +26,6 @@ router.use('/addUser', validation['addUser'], validationHandler, (req: any, res:
   dbOperation.addItem(data).then(result => {
     res.status(200).send(result);
   }).catch(err => {
-    console.log('is error catched');
-    console.log(err);
-    console.log(res);
     res.status(400).send(err);
   });
 });
