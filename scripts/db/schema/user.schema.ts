@@ -48,6 +48,7 @@ userSchema.methods.generateToken = function() {
       email: this.email
     }
   });
+
 }
 const User = mongoose.model<UserModule.UserModel>('Users', userSchema, 'Users');
 
