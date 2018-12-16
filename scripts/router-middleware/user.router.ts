@@ -24,10 +24,11 @@ router.use('/addUser', validation['addUser'], validationHandler, (req: any, res:
   const data: any = matchedData(req, {locations: ['body']});
 
   dbOperation.addItem(data).then(result => {
-    console.log('is response sent?');
     res.status(200).send(result);
   }).catch(err => {
     console.log('is error catched');
+    console.log(err);
+    console.log(res);
     res.status(400).send(err);
   });
 });
