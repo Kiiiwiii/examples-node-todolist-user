@@ -1,7 +1,7 @@
 import mongoose, { Schema, Model } from 'mongoose';
 import { UserModule, DatabaseModule } from 'type';
 import validator from 'validator';
-import jwt from '../../auth/auth';
+import auth from '../../auth/auth';
 import MongooseOperation from '../mongoose.operation';
 
 const userSchema: Schema = new mongoose.Schema({
@@ -39,7 +39,7 @@ const userSchema: Schema = new mongoose.Schema({
 // 1. TAKE AWAY - instance method
 userSchema.methods.generateToken = function() {
   const access = 'auth';
-  const token = jwt.generateToken({_id: this._id.toHexString()});
+  const token = auth.generateToken({_id: this._id.toHexString()});
   this.tokens = this.tokens.concat({
     access,
     token
@@ -54,7 +54,7 @@ userSchema.methods.generateToken = function() {
 
 // 2. TAKE AWAY - Static method, method of the current model
 userSchema.statics.findByToken = function(token: string) {
-  return jwt.verifyToken(token)
+  return auth.verifyToken(token)
     .catch((_err: any) => {
       return Promise.reject({ error: 'token invalid'});
     }).then(id => {
@@ -62,6 +62,19 @@ userSchema.statics.findByToken = function(token: string) {
     return this.findById(id, '_id email');
   });
 }
+
+// 4. TAKE AWAY - Mongoose built-in middleware function
+userSchema.pre('save', function(next) {
+  if(this.isModified('password')) {
+    // hash the password
+    auth.hashPassword((this as any).password).then((hashedPassword: string) => {
+      (this as any).password = hashedPassword;
+      next();
+    })
+  } else {
+    next()
+  }
+})
 
 const User = mongoose.model<UserModule.UserModel>('Users', userSchema, 'Users');
 

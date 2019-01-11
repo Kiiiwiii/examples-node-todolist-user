@@ -1,6 +1,9 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 const secret = process.env.AUTHSECRET || 'my secret for development in local environment.';
+const SALT_ROUNDS = 10;
+
 export default {
   generateToken(payload: any) {
     return jwt.sign(payload, secret);
@@ -14,5 +17,10 @@ export default {
         resolve(decoded);
       });
     });
+  },
+  hashPassword(password: string) {
+    return bcrypt.genSalt(SALT_ROUNDS).then((salt: string) => {
+      return bcrypt.hash(password, salt);
+    })
   }
 }
