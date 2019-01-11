@@ -1,9 +1,11 @@
-import { body } from 'express-validator/check';
+import { body, header } from 'express-validator/check';
 import validator from 'validator';
 import {User, Operation} from '../db/schema/user.schema';
 import express from 'express';
 import { validationHandler } from './validation.ultili';
 import { matchedData } from 'express-validator/filter';
+import auth from '../middleware/auth';
+
 
 // validation middleware
 // powered by express validator
@@ -14,6 +16,10 @@ const validation = {
       .custom((value) => validator.isEmail(value)),
     body('password', 'password is required')
       .exists(),
+  ],
+  userProfile: [
+    header('x-auth', 'X-auth should be provided in order to access to the current path')
+      .exists()
   ]
 }
 
@@ -28,6 +34,13 @@ router.use('/addUser', validation['addUser'], validationHandler, (req: any, res:
   }).catch(err => {
     res.status(400).send(err);
   });
+});
+
+router.use('/user/profile',
+  validation['userProfile'],
+  validationHandler,
+  auth.authenticateUser,(req: any, res: any) => {
+    res.send(req.findedUser);
 });
 
 export default router;

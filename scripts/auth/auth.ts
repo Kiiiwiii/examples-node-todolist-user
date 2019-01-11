@@ -5,7 +5,14 @@ export default {
   generateToken(payload: any) {
     return jwt.sign(payload, secret);
   },
-  verifyToken(token: string, cb: (err: any, decoded: any) => any) {
-    jwt.verify(token, secret, cb);
+  verifyToken(token: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, secret, (err: any, decoded: any) => {
+        if(err) {
+          reject(err);
+        }
+        resolve(decoded);
+      });
+    });
   }
 }

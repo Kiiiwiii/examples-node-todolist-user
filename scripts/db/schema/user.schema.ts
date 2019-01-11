@@ -35,6 +35,8 @@ const userSchema: Schema = new mongoose.Schema({
   ]
 });
 
+
+// 1. TAKE AWAY - instance method
 userSchema.methods.generateToken = function() {
   const access = 'auth';
   const token = jwt.generateToken({_id: this._id.toHexString()});
@@ -48,8 +50,19 @@ userSchema.methods.generateToken = function() {
       email: this.email
     }
   });
-
 }
+
+// 2. TAKE AWAY - Static method, method of the current model
+userSchema.statics.findByToken = function(token: string) {
+  return jwt.verifyToken(token)
+    .catch((_err: any) => {
+      return Promise.reject({ error: 'token invalid'});
+    }).then(id => {
+    // 3. TAKE AWAY - Select relevant field only
+    return this.findById(id, '_id email');
+  });
+}
+
 const User = mongoose.model<UserModule.UserModel>('Users', userSchema, 'Users');
 
 class UserOperation extends MongooseOperation<UserModule.UserModel> implements DatabaseModule.UserOperation<UserModule.UserModel> {
