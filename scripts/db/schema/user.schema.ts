@@ -89,6 +89,14 @@ class UserOperation extends MongooseOperation<UserModule.UserModel> implements D
     return newItem.save().then(() => (newItem as any).generateToken());
   }
   login(email: string, password: string) {
+    let u: UserModule.UserModel;
+    return this.model.findOne({ email }, 'password tokens')
+      .then((user) => {
+        u = user;
+        return auth.comparePassword(password, user.password);
+      })
+      .catch(() =>  Promise.reject({ error: 'user not found' }))
+      .then(result => result ? Promise.resolve(u.tokens.find(t => t.access === 'auth').token) : Promise.reject({error: 'password is not correct'}))
 
   }
 }

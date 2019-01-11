@@ -20,6 +20,14 @@ const validation = {
   userProfile: [
     header('x-auth', 'X-auth should be provided in order to access to the current path')
       .exists()
+  ],
+  login: [
+    body('email', 'Email is required and should comply with a proper format')
+      .exists()
+      .custom((value) => validator.isEmail(value)),
+    body('password', 'Password is required and has a minimal length of 6 characters')
+      .exists()
+      .custom((value: string) => value.length > 5)
   ]
 }
 
@@ -42,5 +50,17 @@ router.use('/user/profile',
   auth.authenticateUser,(req: any, res: any) => {
     res.send(req.findedUser);
 });
+
+router.use('/login',
+  validation['login'],
+  validationHandler,
+  (req: any, res: any) => {
+    const data: any = matchedData(req, { locations: ['body'], onlyValidData: true });
+    dbOperation.login(data.email, data.password).then((user: any) => {
+      res.send(user);
+    }).catch((err: any) => {
+      res.status(401).send(err)
+    })
+  });
 
 export default router;

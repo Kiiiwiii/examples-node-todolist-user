@@ -23,7 +23,7 @@ declare namespace UserModule {
   interface UserModel extends Document {
     email: string,
     password: string,
-    token: {
+    tokens: {
       access: string,
       token: string
     }[]
@@ -47,6 +47,6 @@ declare namespace DatabaseModule {
   }
 
   interface UserOperation<T extends Document> extends MongooseOperation<T>{
-    login: (email: string, password: string) => any;
+    login: (email: string, password: string) => Promise<any>;
   }
 }
