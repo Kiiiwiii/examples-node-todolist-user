@@ -66,6 +66,7 @@ userSchema.statics.findByToken = function(token: string) {
 
 // 4. TAKE AWAY - Mongoose built-in middleware function
 userSchema.pre('save', function(next) {
+  console.log(this);
   if(this.isModified('password')) {
     // hash the password
     auth.hashPassword((this as any).password).then((hashedPassword: string) => {
@@ -88,9 +89,15 @@ class UserOperation extends MongooseOperation<UserModule.UserModel> implements D
   addItem(item: UserModule.UserModel) {
     const user = this.model;
     const newItem = new user(item);
-    return user.init().then(function () {
-      return user.create(newItem);
-    }).then(() => (newItem as any).generateToken()).catch((err) => Promise.reject({error: err}))
+
+    return newItem.save().then(() => (newItem as any).generateToken()).catch((err) => Promise.reject({ error: err }))
+
+
+    // return user.init().then(function () {
+    //   // * TAKE AWAY wait until the index is built
+    //   // https://mongoosejs.com/docs/validation.html#the-unique-option-is-not-a-validator
+    //   return user.create(newItem);
+    // }).then(() => (newItem as any).generateToken()).catch((err) => Promise.reject({error: err}))
   }
   login(email: string, password: string) {
     let u: UserModule.UserModel;
