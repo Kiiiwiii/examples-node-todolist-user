@@ -8,7 +8,8 @@ const userSchema: Schema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    // not strictly unique, can still add tow same value at the same time
+    // TODO: more strict unique check
+    // not strictly unique, can still add two same value at the same time
     unique: true,
 
     trim: true,
@@ -85,8 +86,11 @@ class UserOperation extends MongooseOperation<UserModule.UserModel> implements D
 
   // overwrite inherited method
   addItem(item: UserModule.UserModel) {
-    const newItem = new this.model(item);
-    return newItem.save().then(() => (newItem as any).generateToken());
+    const user = this.model;
+    const newItem = new user(item);
+    return user.init().then(function () {
+      return user.create(newItem);
+    }).then(() => (newItem as any).generateToken()).catch((err) => Promise.reject({error: err}))
   }
   login(email: string, password: string) {
     let u: UserModule.UserModel;
