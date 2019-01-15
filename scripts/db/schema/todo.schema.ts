@@ -5,16 +5,16 @@ const TodoSchema: Schema = new mongoose.Schema({
   text: {
     type: String,
     required: true,
-    minlength: 1
+    minlength: 1,
   },
   isCompleted: {
     type: Boolean,
-    default: false
+    default: false,
   },
   completedAt: {
     type: Number,
-    default: null
-  }
+    default: null,
+  },
 });
 
 const Todo = mongoose.model<TodoModule.TodoModel>('Todos', TodoSchema, 'Todos');

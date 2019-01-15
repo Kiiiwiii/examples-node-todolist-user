@@ -1,5 +1,5 @@
-import { Db, ObjectID } from "mongodb";
-import { DatabaseModule, TodoModule, UserModule } from "type";
+import { Db, ObjectID } from 'mongodb';
+import { DatabaseModule, TodoModule, UserModule } from 'type';
 
 class Operation<T> implements DatabaseModule.Operation<T> {
   private collectionName = '';
@@ -34,10 +34,10 @@ class Operation<T> implements DatabaseModule.Operation<T> {
   public updateItem = (db: Db, filter: Partial<T> | string, update: Partial<T>) => {
     const properFilters = typeof filter === 'string' ? new ObjectID(filter) : filter;
     return db.collection<Partial<T> | ObjectID>(this.collectionName).findOneAndUpdate(properFilters, {
-      $set: update
+      $set: update,
     }, {
-      returnOriginal: false
-    })
+      returnOriginal: false,
+    });
   }
 }
 
@@ -51,7 +51,6 @@ class User extends Operation<UserModule.User>{
     super('Users');
   }
 }
-
 
 export const USER = new User();
 export const TODO = new Todo();

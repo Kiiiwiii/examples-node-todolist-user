@@ -6,7 +6,6 @@ import { validationHandler } from './validation.ultili';
 import { matchedData } from 'express-validator/filter';
 import auth from '../middleware/auth';
 
-
 // validation middleware
 // powered by express validator
 const validation = {
@@ -27,9 +26,9 @@ const validation = {
       .custom((value) => validator.isEmail(value)),
     body('password', 'Password is required and has a minimal length of 6 characters')
       .exists()
-      .custom((value: string) => value.length > 5)
-  ]
-}
+      .custom((value: string) => value.length > 5),
+  ],
+};
 
 const dbOperation = new Operation(User);
 const router = express.Router();
@@ -47,7 +46,7 @@ router.use('/addUser', validation['addUser'], validationHandler, (req: any, res:
 router.use('/user/profile',
   validation['userProfile'],
   validationHandler,
-  auth.authenticateUser,(req: any, res: any) => {
+  auth.authenticateUser, (req: any, res: any) => {
     res.send(req.findedUser);
 });
 
@@ -56,11 +55,11 @@ router.use('/login',
   validationHandler,
   (req: any, res: any) => {
     const data: any = matchedData(req, { locations: ['body'], onlyValidData: true });
-    dbOperation.login(data.email, data.password).then((user: any) => {
-      res.send(user);
+    dbOperation.login(data.email, data.password).then((token: any) => {
+      res.send(token);
     }).catch((err: any) => {
-      res.status(401).send(err)
-    })
+      res.status(401).send(err);
+    });
   });
 
 export default router;
