@@ -21,9 +21,9 @@ export default {
   hashPassword(password: string) {
     return bcrypt.genSalt(SALT_ROUNDS).then((salt: string) => {
       return bcrypt.hash(password, salt);
-    })
+    });
   },
   comparePassword(password: string, hash: string) {
     return bcrypt.compare(password, hash);
-  }
-}
+  },
+};
