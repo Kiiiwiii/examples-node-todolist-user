@@ -6,7 +6,6 @@ import Operation from '../db/mongoose.operation';
 import Todo from '../db/schema/todo.schema';
 import {validationHandler} from './validation.ultili';
 
-
 // validation middleware
 // powered by express validator
 const validation = {
@@ -15,7 +14,7 @@ const validation = {
     body('isCompleted', 'isCompleted should be a boolean value')
       .optional()
       .custom((value) => value === true || value === false),
-    body('completedAt', 'completedAt should be a timestamp number').optional().isInt()
+    body('completedAt', 'completedAt should be a timestamp number').optional().isInt(),
   ],
   lists: [
     query('text').optional(),
@@ -23,20 +22,20 @@ const validation = {
       .optional()
       .custom((value) => value === true || value === false),
     sanitizeQuery('text').customSanitizer(value => {
-      return new RegExp(value, "i");
-    })
+      return new RegExp(value, 'i');
+    }),
     // we can also query some todos which completed before a timestamp
   ],
   item: [
-    param('id', 'id is required').exists()
+    param('id', 'id is required').exists(),
   ],
   updateItem: [
     param('id', 'id is required').exists(),
     body('text').optional(),
     body('isCompleted', 'isCompleted should be a boolean value')
-      .optional().custom((value) => value === true || value === false)
-  ]
-}
+      .optional().custom((value) => value === true || value === false),
+  ],
+};
 
 const dbOperation = new Operation(Todo);
 // router logic
@@ -64,15 +63,15 @@ router.get('/item/:id', validation['item'], validationHandler, (req: any, res: a
   const queryData = matchedData(req, {locations: ['params']});
   dbOperation.findItem(queryData.id).then(result => {
     // returns null when no data is matched
-    if(!result){
+    if (!result) {
       return Promise.reject('id is not valid');
     }
     res.status(200).send(result);
   }).catch(err => {
     res.send({
       data: null,
-      errorMsg: 'id is not valid'
-    })
+      errorMsg: 'id is not valid',
+    });
     console.log(err);
   });
 });
@@ -88,20 +87,20 @@ router.delete('/:id', validation['item'], validationHandler, (req: any, res: any
   }).catch(err => {
     res.send({
       data: null,
-      errorMsg: 'id is not valid'
-    })
+      errorMsg: 'id is not valid',
+    });
     console.log(err);
   });
-})
+});
 
 router.patch('/:id', validation['updateItem'], validationHandler, (req: any, res: any) => {
   const id = matchedData(req, {locations: ['params']}).id;
   const update = matchedData(req, {locations: ['body']});
 
   // complete logic
-  if(update.isCompleted === true) {
+  if (update.isCompleted === true) {
     update.completedAt = new Date().getTime();
-  } else if(update.isCompleted === false) {
+  } else if (update.isCompleted === false) {
     update.completedAt = null;
   }
   dbOperation.updateItem(id, update).then(result => {
@@ -112,10 +111,10 @@ router.patch('/:id', validation['updateItem'], validationHandler, (req: any, res
   }).catch(err => {
     res.send({
       data: null,
-      errorMsg: 'id is not valid'
-    })
+      errorMsg: 'id is not valid',
+    });
     console.log(err);
   });
-})
+});
 
 export default router;

@@ -26,7 +26,6 @@ declare namespace UserModule {
     tokens: {
       access: string,
       token: string,
-      tokenExpiredAt: number
     }[]
   }
 }

@@ -6,12 +6,12 @@ const SALT_ROUNDS = 10;
 
 export default {
   generateToken(payload: any) {
-    return jwt.sign(payload, secret);
+    return jwt.sign(payload, secret, {expiresIn: '30d'});
   },
   verifyToken(token: string): Promise<any> {
     return new Promise((resolve, reject) => {
       jwt.verify(token, secret, (err: any, decoded: any) => {
-        if(err) {
+        if (err) {
           reject(err);
         }
         resolve(decoded);
