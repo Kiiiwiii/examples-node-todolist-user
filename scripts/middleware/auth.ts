@@ -12,7 +12,7 @@ export default {
         }
 
         // 1. TAKE AWAY - by modifying the req object, we can pass variables down to the next middleware
-        req.findedUser = user;
+        req.user = user;
         next();
       })
       // all kinds of error will be finally catched here

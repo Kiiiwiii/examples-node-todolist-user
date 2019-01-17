@@ -71,7 +71,7 @@ userSchema.statics.findByToken = function(token: string) {
       return Promise.reject({ error: 'token invalid'});
     }).then(id => {
     // 3. TAKE AWAY - Select relevant field only
-    return this.findById(id, '_id email tokens');
+    return this.findById(id, '_id email');
   });
 };
 

@@ -11,6 +11,7 @@ declare namespace TodoModule {
     text: string
     isCompleted: boolean
     completedAt: number
+    _creator: any
   }
 }
 
@@ -41,12 +42,19 @@ declare namespace DatabaseModule {
   interface MongooseOperation<T extends Document> {
     addItem: (item: T) => Promise<any>;
     lists: (options?: Partial<T>) => DocumentQuery<T[], T, {}>;
-    findItem: (id: string) => DocumentQuery<T, T, {}>;
-    deleteItem: (id: string) => DocumentQuery<T, T, {}>;
-    updateItem: (id: string, update: Partial<T>) => DocumentQuery<T, T, {}>;
+
+    findItem(id: string): DocumentQuery<T, T, {}>;
+    findItem(id: any, _creator: any): DocumentQuery<T, T, {}>;
+
+    deleteItem(id: string): DocumentQuery<T, T, {}>;
+    deleteItem(id: any, _creator: any): DocumentQuery<T, T, {}>;
+
+
+    updateItem(id: string, update: Partial<T>): DocumentQuery<T, T, {}>;
+    updateItem(id: any, update: Partial<T>, _creator: any): DocumentQuery<T, T, {}>;
   }
 
-  interface UserOperation<T extends Document> extends MongooseOperation<T>{
+  interface UserOperation<T extends Document>{
     login: (email: string, password: string) => Promise<any>;
   }
 }

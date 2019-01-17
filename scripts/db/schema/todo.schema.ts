@@ -1,5 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
-import { TodoModule } from 'type';
+import mongoose, { Schema, Model } from 'mongoose';
+import { TodoModule, DatabaseModule } from 'type';
+import MongooseOperation from '../mongoose.operation';
 
 const TodoSchema: Schema = new mongoose.Schema({
   text: {
@@ -15,7 +16,21 @@ const TodoSchema: Schema = new mongoose.Schema({
     type: Number,
     default: null,
   },
+  _creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
 });
 
 const Todo = mongoose.model<TodoModule.TodoModel>('Todos', TodoSchema, 'Todos');
-export default Todo;
+
+class TodoOperation extends MongooseOperation<TodoModule.TodoModel> {
+  constructor(model: Model<TodoModule.TodoModel>) {
+    super(model);
+  }
+}
+
+export {
+  Todo,
+  TodoOperation as Operation,
+};

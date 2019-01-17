@@ -18,7 +18,7 @@ const validation = {
   ],
   userProfile: [
     header('x-auth', 'X-auth should be provided in order to access to the current path')
-      .exists()
+      .exists(),
   ],
   login: [
     body('email', 'Email is required and should comply with a proper format')
@@ -47,7 +47,7 @@ router.use('/user/profile',
   validation['userProfile'],
   validationHandler,
   auth.authenticateUser, (req: any, res: any) => {
-    res.send(req.findedUser);
+    res.send(req.user);
 });
 
 router.use('/login',
