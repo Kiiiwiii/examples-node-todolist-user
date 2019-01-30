@@ -2,23 +2,23 @@ import {startConfigProcess} from './config/config';
 
 startConfigProcess().then(() => {
   async function runServer() {
-    const express = await import('express');
-    const log = await import('./log');
-    const bodyParser = await import('body-parser');
-    const apiRouter = await import('./router-middleware/api');
+    const express = (await import('express')).default;
+    const log = (await import('./log')).default;
+    const bodyParser = (await import('body-parser')).default;
+    const apiRouter = (await import('./router-middleware/api')).default;
     await import('./db/mongodb-connect');
 
-    const app = express.default();
+    const app = express();
     const port = process.env.PORT || 3000;
     // app level middleware
-    app.use(log.default(__dirname + '/../log', 'app-log.txt'));
+    app.use(log(__dirname + '/../log', 'app-log.txt'));
 
     // static file
     app.use('/static', express.static(__dirname + '/../client/public'));
 
     // router middleware - api data
-    app.use(bodyParser.default.json());
-    app.use('/api', apiRouter.default);
+    app.use(bodyParser.json());
+    app.use('/api', apiRouter);
 
     // root - single page application - entry point
     app.get('*', (req: any, res: any) => {
