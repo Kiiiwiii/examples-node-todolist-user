@@ -33,7 +33,7 @@ class MongooseOperation<T extends Document> implements DatabaseModule.MongooseOp
     if (!_creatorId) {
       return this.model.findOneAndUpdate({ id }, update, { new: true });
     }
-    return this.model.findOneAndUpdate({ _id: id, _creator: _creatorId }, update);
+    return this.model.findOneAndUpdate({ _id: id, _creator: _creatorId }, update, { new: true } );
   }
 }
 
