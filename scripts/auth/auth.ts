@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-const secret = process.env.AUTHSECRET || 'my secret for development in local environment.';
+const secret = process.env.AUTHSECRET;
 const SALT_ROUNDS = 10;
 
 export default {

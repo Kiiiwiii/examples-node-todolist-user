@@ -1,4 +1,5 @@
 import express from 'express';
+import './config/config';
 import log from './log';
 import bodyParser from 'body-parser';
 import apiRouter from './router-middleware/api';
@@ -19,8 +20,9 @@ app.use('/api', apiRouter);
 // root - single page application - entry point
 app.get('*', (_req, res) => {
   res.sendFile('index.html', {
-    root: __dirname + '/../client'
+    root: __dirname + '/../client',
   });
 });
 
+// tslint:disable-next-line:no-console
 app.listen(port, () => console.log(`http://zhan.com:${port}`));

@@ -1,4 +1,5 @@
 # Ingore file named ''
+scripts/config/config.js
 
 #Ignore folder named
 node_modules/
