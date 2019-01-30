@@ -1,28 +1,40 @@
-import express from 'express';
-import './config/config';
-import log from './log';
-import bodyParser from 'body-parser';
-import apiRouter from './router-middleware/api';
-import './db/mongodb-connect';
+import {startConfigProcess} from './config/config';
 
-const app = express();
-const port = process.env.PORT || 3000;
-// app level middleware
-app.use(log(__dirname + '/../log', 'app-log.txt'));
+startConfigProcess().then(() => {
+  async function runServer() {
+    const express = await import('express');
+    const log = await import('./log');
+    const bodyParser = await import('body-parser');
+    const apiRouter = await import('./router-middleware/api');
+    await import('./db/mongodb-connect');
 
-// static file
-app.use('/static', express.static(__dirname + '/../client/public'));
+    const app = express.default();
+    const port = process.env.PORT || 3000;
+    // app level middleware
+    app.use(log.default(__dirname + '/../log', 'app-log.txt'));
 
-// router middleware - api data
-app.use(bodyParser.json());
-app.use('/api', apiRouter);
+    // static file
+    app.use('/static', express.static(__dirname + '/../client/public'));
 
-// root - single page application - entry point
-app.get('*', (_req, res) => {
-  res.sendFile('index.html', {
-    root: __dirname + '/../client',
-  });
+    // router middleware - api data
+    app.use(bodyParser.default.json());
+    app.use('/api', apiRouter.default);
+
+    // root - single page application - entry point
+    app.get('*', (req: any, res: any) => {
+      res.sendFile('index.html', {
+        root: __dirname + '/../client',
+      });
+    });
+
+    // tslint:disable-next-line:no-console
+    app.listen(port, () => console.log(`http://zhan.com:${port}`));
+  }
+  runServer();
 });
 
-// tslint:disable-next-line:no-console
-app.listen(port, () => console.log(`http://zhan.com:${port}`));
+// import express from 'express';
+// import log from './log';
+// import bodyParser from 'body-parser';
+// import apiRouter from './router-middleware/api';
+// import './db/mongodb-connect';

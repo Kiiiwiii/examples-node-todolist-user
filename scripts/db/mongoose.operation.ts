@@ -30,9 +30,11 @@ class MongooseOperation<T extends Document> implements DatabaseModule.MongooseOp
   }
 
   updateItem(id: string, update: Partial<T>, _creatorId?: any) {
+    // for queries which do not require _creatorId
     if (!_creatorId) {
       return this.model.findOneAndUpdate({ id }, update, { new: true });
     }
+    // for queries which require _creatorID
     return this.model.findOneAndUpdate({ _id: id, _creator: _creatorId }, update, { new: true } );
   }
 }
