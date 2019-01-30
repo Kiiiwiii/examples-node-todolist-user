@@ -1,7 +1,0 @@
-{
-  "development": {
-    "PORT": 3000,
-    "AUTHSECRET": "C&zSmk!wkM8(m@.Et'Rz=5^AMa#-%j'dLg}5BLbJ6<TLd42(x",
-    "MONGODB_URI": "mongodb://localhost:27017/Exercise-TodoApp"
-  }
-}
