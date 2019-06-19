@@ -41,6 +41,7 @@ userSchema.methods.generateAuthToken = function() {
   const user = this;
   const token = auth.generateToken({_id: user._id.toHexString()});
 
+  // 这里用数据库额外管理了 token，实现了最多一个 token valid的踢人效果
   // if the token exists, update the token
   if (user.tokens.find((t: any) => t.access === 'auth')) {
     // * TAKE AWAY, muss pass a new reference here!
@@ -83,6 +84,7 @@ userSchema.pre('save', function(next) {
       (this as any).password = hashedPassword;
       next();
     });
+    // 不能使用 return; 否则 model instance 不会被更改
   } else {
     next();
   }
